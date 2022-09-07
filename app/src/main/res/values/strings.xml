@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">SepiaTask</string>
+    <string name="no_data_available">No Data Available</string>
+    <string name="petimage">petImage</string>
+</resources>
