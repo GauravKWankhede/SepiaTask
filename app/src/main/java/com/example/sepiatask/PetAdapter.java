@@ -38,17 +38,14 @@ public class PetAdapter extends RecyclerView.Adapter<PetAdapter.ViewHolder> {
                 .load(info.getImage_url())
                 .centerInside()
                 .into(holder.petImage);
-        holder.layout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(context,PetDetailsActivity.class);
-                intent.putExtra("title", info.getTitle());
-                intent.putExtra("image_url", info.getImage_url());
-                intent.putExtra("content_url", info.getContent_url());
-                intent.putExtra("date_added", info.getDate_added());
+        holder.layout.setOnClickListener(view -> {
+            Intent intent = new Intent(context,PetDetailsActivity.class);
+            intent.putExtra("title", info.getTitle());
+            intent.putExtra("image_url", info.getImage_url());
+            intent.putExtra("content_url", info.getContent_url());
+            intent.putExtra("date_added", info.getDate_added());
 
-                context.startActivity(intent);
-            }
+            context.startActivity(intent);
         });
 
 

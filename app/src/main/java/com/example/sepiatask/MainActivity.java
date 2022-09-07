@@ -5,7 +5,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
@@ -23,27 +22,29 @@ public class MainActivity extends AppCompatActivity {
 
     RecyclerView recyclerView;
     TextView textView;
+    String workingHours;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         initVar();
-        String response = loadJsonFromAssets();
-        String workingHours = getWorkingHours();
-        String TAG = "MainActivity";
-        Log.e(TAG, response);
-        Log.e(TAG, workingHours);
+        workingHours = getWorkingHours();
+        assert workingHours != null;
+        String[] a = workingHours.split(" ");
         Calendar calendar = Calendar.getInstance();
-        Log.e(TAG, String.valueOf("09:00".compareTo(calendar.get(Calendar.HOUR_OF_DAY)+":"+calendar.get(Calendar.MINUTE))<=0 && "18:00".compareTo(calendar.get(Calendar.HOUR_OF_DAY)+":"+calendar.get(Calendar.MINUTE))>=0 && calendar.get(Calendar.DAY_OF_WEEK)>1 && calendar.get(Calendar.DAY_OF_WEEK)<7 ) );
-        if ("09:00".compareTo(calendar.get(Calendar.HOUR_OF_DAY)+":"+calendar.get(Calendar.MINUTE))<=0
-                && "18:00".compareTo(calendar.get(Calendar.HOUR_OF_DAY)+":"+calendar.get(Calendar.MINUTE))>=0
+        String hours = String.valueOf(calendar.get(Calendar.HOUR_OF_DAY)).length()==1?"0"+ calendar.get(Calendar.HOUR_OF_DAY):String.valueOf(calendar.get(Calendar.HOUR_OF_DAY));
+        String minutes = String.valueOf(calendar.get(Calendar.MINUTE)).length()==1?"0"+ calendar.get(Calendar.MINUTE): String.valueOf(calendar.get(Calendar.MINUTE));
+        if ((("0"+a[4]).compareTo(hours+":"+minutes))<=0
+                && (a[6].substring(0,5)).compareTo(hours+":"+minutes)>=0
                 && calendar.get(Calendar.DAY_OF_WEEK)>1
                 && calendar.get(Calendar.DAY_OF_WEEK)<7 ){
             recyclerView.setVisibility(View.VISIBLE);
         }
         else{
             textView.setVisibility(View.VISIBLE);
+            recyclerView.setVisibility(View.GONE);
         }
 
         recyclerView.setLayoutManager(new LinearLayoutManager(MainActivity.this));
@@ -57,7 +58,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private String getWorkingHours() {
-        String json = null;
+        String json;
         try {
             InputStream inputStream = getAssets().open("config.json");
             int size = inputStream.available();
@@ -73,7 +74,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public String loadJsonFromAssets(){
-        String json = null;
+        String json;
     try {
         InputStream inputStream = getAssets().open("pets_list.json");
         int size = inputStream.available();
